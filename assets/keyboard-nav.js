@@ -12,12 +12,19 @@ function linkIn(el) {
 
 function clearHl() {
   document.querySelectorAll('.nav-active').forEach(el => el.classList.remove('nav-active'));
+  document.querySelectorAll('tr.nav-active td').forEach(td => td.classList.remove('nav-active'));
+  document.querySelectorAll('tbody tr').forEach(tr => tr.classList.remove('nav-active'));
 }
 
 function hl(el) {
   if (!el) return;
   clearHl();
-  el.classList.add('nav-active');
+  if (el.tagName === 'TR') {
+    el.classList.add('nav-active');
+    el.querySelectorAll('td').forEach(td => td.classList.add('nav-active'));
+  } else {
+    el.classList.add('nav-active');
+  }
   el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
