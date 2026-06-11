@@ -38,7 +38,8 @@ a:hover { text-decoration: underline }
 .term-head strong { margin-left: 10px; color: var(--muted); font-weight: 500 }
 h1 { font-size: clamp(36px, 7vw, 72px); line-height: 1; margin: 0 0 10px }
 .cmd { color: var(--accent); margin: 0 0 8px }
-nav { display: flex; flex-wrap: wrap; gap: 14px; margin: 24px 0 }
+nav { display: flex; align-items: center; flex-wrap: wrap; gap: .5em; margin: 24px 0 }
+nav a + a::before { content: "\00B7"; margin-right: .5em; color: var(--fg); opacity: .5 }
 footer nav { justify-content: center }
 table { width: 100%; border-collapse: collapse }
 th, td { text-align: left; padding: 8px 0; border-bottom: 1px solid var(--line) }
