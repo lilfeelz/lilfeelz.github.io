@@ -16,14 +16,10 @@ a:hover { text-decoration: underline }
 table { width: 100%; border-collapse: collapse }
 th, td { text-align: left; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.16) }
 th { color: #9aa4b2; font-weight: 500; font-size: .85rem }
-td:first-child { min-width: 140px }
-td:last-child { color: #9aa4b2 }
-tr.nav-active td {
+.col-gh { width: 28px; text-align: center }
+.col-gh img { display: block }
+.col-name { min-width: 140px }
+.col-desc { color: #9aa4b2 }
+td.nav-active {
   background: color-mix(in srgb, #9ee7ff 18%, transparent);
-}
-a.nav-active {
-  background: color-mix(in srgb, #9ee7ff 18%, transparent);
-  outline: 1px solid #9ee7ff;
-  outline-offset: 4px;
-  border-radius: 3px;
 }

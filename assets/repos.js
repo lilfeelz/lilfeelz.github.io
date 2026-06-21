@@ -15,7 +15,7 @@ fetch(`${GH}/users/${USER}/repos?sort=updated&per_page=100&type=owner`)
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;');
-        return `<tr><td><a href="https://docs.lilfeelz.org/${r.name}">${name}</a></td><td><a href="https://github.com/${USER}/${r.name}"><img src="https://img.shields.io/badge/-181717?logo=github" alt="github"></a></td><td>${desc}</td></tr>`;
+        return `<tr><td class="col-gh"><a href="https://github.com/${USER}/${r.name}"><img src="https://img.shields.io/badge/-181717?logo=github" alt="github"></a></td><td class="col-name"><a href="https://docs.lilfeelz.org/${r.name}">${name}</a></td><td class="col-desc">${desc}</td></tr>`;
       })
       .join('');
   })

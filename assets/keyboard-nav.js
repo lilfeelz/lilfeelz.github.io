@@ -1,44 +1,56 @@
-let navIdx = -1;
+let rowIdx = -1;
+let colIdx = 1;
 
-function navItems() {
-  const rows = [...document.querySelectorAll('tbody tr')];
-  const links = [...document.querySelectorAll('footer nav a')];
-  return [...rows, ...links];
+function rows() {
+  return [...document.querySelectorAll('tbody tr')];
+}
+
+function curCell() {
+  const r = rows();
+  if (rowIdx < 0 || rowIdx >= r.length) return null;
+  return r[rowIdx].children[colIdx];
 }
 
 function linkIn(el) {
-  return el.tagName === 'A' ? el : el.querySelector('a');
+  return el?.querySelector('a');
 }
 
 function clearHl() {
   document.querySelectorAll('.nav-active').forEach(el => el.classList.remove('nav-active'));
-  document.querySelectorAll('tr.nav-active td').forEach(td => td.classList.remove('nav-active'));
-  document.querySelectorAll('tbody tr').forEach(tr => tr.classList.remove('nav-active'));
 }
 
 function hl(el) {
   if (!el) return;
   clearHl();
-  if (el.tagName === 'TR') {
-    el.classList.add('nav-active');
-    el.querySelectorAll('td').forEach(td => td.classList.add('nav-active'));
-  } else {
-    el.classList.add('nav-active');
-  }
+  el.classList.add('nav-active');
   el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-function nav(d) {
-  const items = navItems();
-  if (!items.length) return;
-  navIdx = (navIdx + d + items.length) % items.length;
-  hl(items[navIdx]);
+function navRow(d) {
+  const r = rows();
+  if (!r.length) return;
+  rowIdx = (rowIdx + d + r.length) % r.length;
+  hl(curCell());
+}
+
+function navCol(d) {
+  const c = colIdx + d;
+  if (c < 0 || c > 1) return;
+  colIdx = c;
+  hl(curCell());
+}
+
+function focus(r, c) {
+  const all = rows();
+  if (r < 0 || r >= all.length) return;
+  if (c < 0 || c > 1) c = 1;
+  rowIdx = r;
+  colIdx = c;
+  hl(curCell());
 }
 
 function follow() {
-  const items = navItems();
-  if (navIdx < 0 || navIdx >= items.length) return;
-  const a = linkIn(items[navIdx]);
+  const a = linkIn(curCell());
   if (a) window.open(a.href, '_blank');
 }
 
@@ -49,12 +61,22 @@ document.addEventListener('keydown', e => {
     case 'j':
     case 'ArrowDown':
       e.preventDefault();
-      nav(1);
+      navRow(1);
       break;
     case 'k':
     case 'ArrowUp':
       e.preventDefault();
-      nav(-1);
+      navRow(-1);
+      break;
+    case 'h':
+    case 'ArrowLeft':
+      e.preventDefault();
+      navCol(-1);
+      break;
+    case 'l':
+    case 'ArrowRight':
+      e.preventDefault();
+      navCol(1);
       break;
     case 'Enter':
       e.preventDefault();
@@ -62,7 +84,7 @@ document.addEventListener('keydown', e => {
       break;
     case 'Escape':
       clearHl();
-      navIdx = -1;
+      rowIdx = -1;
       break;
   }
 });
@@ -70,8 +92,12 @@ document.addEventListener('keydown', e => {
 document.addEventListener('click', e => {
   const link = e.target.closest('a');
   if (!link) return;
-  const el = link.closest('tr') || link;
-  const items = navItems();
-  const i = items.indexOf(el);
-  if (i !== -1) { navIdx = i; hl(el); }
+  const td = link.closest('td');
+  if (!td) return;
+  const tr = td.closest('tr');
+  if (!tr) return;
+  const r = rows().indexOf(tr);
+  if (r === -1) return;
+  const c = [...tr.children].indexOf(td);
+  focus(r, c);
 });
