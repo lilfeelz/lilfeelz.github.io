@@ -7,40 +7,16 @@
   <link rel="stylesheet" href="/assets/style.css">
   <script src="/assets/repos.js" defer></script>
   <script src="/assets/keyboard-nav.js" defer></script>
-  <style>
-    :root {
-      --bg: #0b0d10;
-      --fg: #eef2f7;
-      --muted: #9aa4b2;
-      --line: rgba(255,255,255,.16);
-      --glass: rgba(255,255,255,.075);
-      --accent: #9ee7ff;
-      --font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    }
-  </style>
 </head>
 <body>
 <main class="shell">
-  <section class="terminal glass">
-    <header class="term-head">
-      <span></span><span></span><span></span>
-      <strong>lilfeelz@github ~/repos</strong>
-    </header>
-
-    <p class="cmd">$ ls -la</p>
+  <section>
     <table>
       <thead>
         <tr><th>name</th><th>description</th></tr>
       </thead>
       <tbody id="repos"><!-- populated by assets/repos.js --></tbody>
     </table>
-
-    <footer>
-      <nav>
-        <a href="https://feelz.dev">feelz.dev</a>
-        <a href="https://jakob.melchard.org">jakob.melchard.org</a>
-      </nav>
-    </footer>
   </section>
 </main>
 </body>

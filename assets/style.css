@@ -2,56 +2,28 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 20% 10%, #173141 0, transparent 34rem),
-    radial-gradient(circle at 80% 0%, #25183d 0, transparent 30rem),
-    var(--bg);
-  color: var(--fg);
-  font: 16px/1.55 var(--font);
+  background: #000;
+  color: #eef2f7;
+  font: 16px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
-a { color: var(--accent); text-decoration: none }
+a { color: #9ee7ff; text-decoration: none }
 a:hover { text-decoration: underline }
 .shell {
   width: min(780px, calc(100% - 32px));
   margin: 0 auto;
   padding: 7vh 0;
 }
-.glass {
-  border: 1px solid var(--line);
-  background: var(--glass);
-  backdrop-filter: blur(18px);
-  border-radius: 22px;
-  box-shadow: 0 24px 80px rgba(0,0,0,.35);
-}
-.terminal { padding: 0 28px 28px }
-.term-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 -28px 28px;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--line);
-}
-.term-head span {
-  width: 12px; height: 12px; border-radius: 999px; background: var(--line);
-}
-.term-head strong { margin-left: 10px; color: var(--muted); font-weight: 500 }
-h1 { font-size: clamp(36px, 7vw, 72px); line-height: 1; margin: 0 0 10px }
-.cmd { color: var(--accent); margin: 0 0 8px }
-nav { display: flex; align-items: center; flex-wrap: wrap; gap: .5em; margin: 24px 0 }
-nav a + a::before { content: "\00B7"; margin-right: .5em; color: var(--fg); opacity: .5 }
-footer nav { justify-content: center }
 table { width: 100%; border-collapse: collapse }
-th, td { text-align: left; padding: 8px 0; border-bottom: 1px solid var(--line) }
-th { color: var(--muted); font-weight: 500; font-size: .85rem }
+th, td { text-align: left; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.16) }
+th { color: #9aa4b2; font-weight: 500; font-size: .85rem }
 td:first-child { min-width: 140px }
-td:last-child { color: var(--muted) }
+td:last-child { color: #9aa4b2 }
 tr.nav-active td {
-  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  background: color-mix(in srgb, #9ee7ff 18%, transparent);
 }
 a.nav-active {
-  background: color-mix(in srgb, var(--accent) 18%, transparent);
-  outline: 1px solid var(--accent);
+  background: color-mix(in srgb, #9ee7ff 18%, transparent);
+  outline: 1px solid #9ee7ff;
   outline-offset: 4px;
   border-radius: 3px;
 }
