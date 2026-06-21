@@ -23,3 +23,5 @@ th { color: #9aa4b2; font-weight: 500; font-size: .85rem }
 td.nav-active {
   background: color-mix(in srgb, #9ee7ff 18%, transparent);
 }
+.foot-links { margin-top: 24px; font-size: .85rem; text-align: center }
+.foot-links a + a::before { content: "\00B7"; margin: 0 .5em; color: #9aa4b2 }
