@@ -15,11 +15,11 @@ fetch(`${GH}/users/${USER}/repos?sort=updated&per_page=100&type=owner`)
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;');
-        return `<tr><td><a href="https://docs.lilfeelz.org/${r.name}">${name}</a></td><td>${desc}</td></tr>`;
+        return `<tr><td><a href="https://docs.lilfeelz.org/${r.name}">${name}</a></td><td><a href="https://github.com/${USER}/${r.name}"><img src="https://img.shields.io/badge/-181717?logo=github" alt="github"></a></td><td>${desc}</td></tr>`;
       })
       .join('');
   })
   .catch(e => {
     document.getElementById('repos').innerHTML =
-      '<tr><td colspan="2">failed to load repos</td></tr>';
+      '<tr><td colspan="3">failed to load repos</td></tr>';
   });
