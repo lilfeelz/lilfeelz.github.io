@@ -13,19 +13,6 @@ a:hover { text-decoration: underline }
   margin: 0 auto;
   padding: 7vh 0;
 }
-.filter-wrap { margin-bottom: 8px }
-#filter {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255,255,255,.16);
-  color: #eef2f7;
-  font: inherit;
-  padding: 8px 0;
-  outline: none;
-}
-#filter::placeholder { color: #9aa4b2 }
-#filter:focus { border-bottom-color: #9ee7ff }
 table { width: 100%; border-collapse: collapse }
 th, td { text-align: left; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.16) }
 th { color: #9aa4b2; font-weight: 500; font-size: .85rem }

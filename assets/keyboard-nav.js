@@ -50,18 +50,10 @@ function follow() {
   if (a) window.open(a.href, '_blank');
 }
 
-const input = document.getElementById('filter');
-input.addEventListener('input', () => { rowIdx = -1; clearHl(); });
-
 document.addEventListener('keydown', e => {
-  if (e.target === input && e.key !== 'Escape' && e.key !== 'Enter') return;
+  if (e.metaKey || e.ctrlKey) return;
 
   switch (e.key) {
-    case '/':
-      e.preventDefault();
-      input.focus();
-      input.select();
-      break;
     case 'j': case 'ArrowDown':
       e.preventDefault();
       navRow(1);
@@ -80,18 +72,11 @@ document.addEventListener('keydown', e => {
       break;
     case 'Enter':
       e.preventDefault();
-      input.blur();
       follow();
       break;
     case 'Escape':
-      if (e.target === input) {
-        input.value = '';
-        input.dispatchEvent(new Event('input'));
-        input.blur();
-      } else {
-        clearHl();
-        rowIdx = -1;
-      }
+      clearHl();
+      rowIdx = -1;
       break;
   }
 });
