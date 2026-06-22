@@ -2,9 +2,21 @@ const GH = 'https://api.github.com';
 const USER = 'lilfeelz';
 const DOCS = `https://docs.${USER}.org`;
 
-function render(repos) {
+let allRepos = [];
+
+function fuzzy(q, s) {
+  q = q.toLowerCase();
+  s = s.toLowerCase();
+  let qi = 0;
+  for (let si = 0; si < s.length && qi < q.length; si++)
+    if (q[qi] === s[si]) qi++;
+  return qi === q.length;
+}
+
+function render(filter) {
   const tbody = document.getElementById('repos');
-  tbody.innerHTML = repos.map(r => {
+  const filtered = filter ? allRepos.filter(r => fuzzy(filter, r.name)) : allRepos;
+  tbody.innerHTML = filtered.map(r => {
     const name = r.name.replace(/&/g, '&amp;');
     const desc = (r.description || '')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -15,8 +27,11 @@ function render(repos) {
 fetch(`${GH}/users/${USER}/repos?sort=updated&per_page=100&type=owner`)
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(repos => {
-    render(repos.filter(r => !r.fork && !r.archived && !r.private && r.name !== 'witchblades.org')
-      .sort((a, b) => a.name.localeCompare(b.name)));
+    allRepos = repos.filter(r => !r.fork && !r.archived && !r.private && r.name !== 'witchblades.org')
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const input = document.getElementById('filter');
+    input.addEventListener('input', () => render(input.value));
+    render('');
   })
   .catch(() => {
     document.getElementById('repos').innerHTML =
