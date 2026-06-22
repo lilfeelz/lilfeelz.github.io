@@ -1,9 +1,7 @@
 let rowIdx = -1;
 let colIdx = 1;
 
-function rows() {
-  return [...document.querySelectorAll('tbody tr')];
-}
+function rows() { return [...document.querySelectorAll('tbody tr')]; }
 
 function curCell() {
   const r = rows();
@@ -11,9 +9,7 @@ function curCell() {
   return r[rowIdx].children[colIdx];
 }
 
-function linkIn(el) {
-  return el?.querySelector('a');
-}
+function linkIn(el) { return el?.querySelector('a'); }
 
 function clearHl() {
   document.querySelectorAll('.nav-active').forEach(el => el.classList.remove('nav-active'));
@@ -54,37 +50,48 @@ function follow() {
   if (a) window.open(a.href, '_blank');
 }
 
+const input = document.getElementById('filter');
+input.addEventListener('input', () => { rowIdx = -1; clearHl(); });
+
 document.addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.target === input && e.key !== 'Escape' && e.key !== 'Enter') return;
 
   switch (e.key) {
-    case 'j':
-    case 'ArrowDown':
+    case '/':
+      e.preventDefault();
+      input.focus();
+      input.select();
+      break;
+    case 'j': case 'ArrowDown':
       e.preventDefault();
       navRow(1);
       break;
-    case 'k':
-    case 'ArrowUp':
+    case 'k': case 'ArrowUp':
       e.preventDefault();
       navRow(-1);
       break;
-    case 'h':
-    case 'ArrowLeft':
+    case 'h': case 'ArrowLeft':
       e.preventDefault();
       navCol(-1);
       break;
-    case 'l':
-    case 'ArrowRight':
+    case 'l': case 'ArrowRight':
       e.preventDefault();
       navCol(1);
       break;
     case 'Enter':
       e.preventDefault();
+      input.blur();
       follow();
       break;
     case 'Escape':
-      clearHl();
-      rowIdx = -1;
+      if (e.target === input) {
+        input.value = '';
+        input.dispatchEvent(new Event('input'));
+        input.blur();
+      } else {
+        clearHl();
+        rowIdx = -1;
+      }
       break;
   }
 });
