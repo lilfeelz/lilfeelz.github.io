@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  js:
+    uses: JakobMelchard/.github/.github/workflows/node.yml@main
+    with:
+      install-cmd: ""            # no package.json — nothing to install
+      lint-cmd: ""
+      check-cmd: |
+        rc=0
+        for f in assets/*.js; do
+          echo "checking $f"
+          node --check "$f" || rc=1
+        done
+        exit $rc
