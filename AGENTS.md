@@ -10,8 +10,9 @@ assets/
   style.css          # Dark theme, glass accents, Dracula palette
   repos.js           # GitHub API fetch + fuzzy filter + render
   keyboard-nav.js    # Vim-style h/j/k/l nav
-.agents/AGENTS.md    # This file
-.todo                # Planned work
+AGENTS.md            # This file
+.agents/             # Vendored org rules (AGENTS.org.md) and skills
+.github/workflows/   # ci.yml: node --check on assets/*.js
 ```
 
 ## Workflow
@@ -28,6 +29,14 @@ python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
+### Verify
+
+```sh
+for f in assets/*.js; do node --check "$f"; done
+```
+
+Same check CI runs.
+
 ### Deploy
 
 Push to `main` → GH Pages auto-deploys to `docs.lilfeelz.org`.
@@ -40,12 +49,14 @@ Push to `main` → GH Pages auto-deploys to `docs.lilfeelz.org`.
 - Filters: no forks, no archived, no private, exclude `witchblades.org`
 - `fuzzy(q, s)`: sequential char match, case-insensitive
 - Error state: shows "failed to load repos" row, no retry
+- `esc()` escapes `& < > " '` for every API string put into HTML; URL segments also go through `encodeURIComponent`
 
 ### keyboard-nav.js
 
 - Row tracking via `rowIdx`, column via `colIdx` (0=github icon, 1=name, 2=desc)
 - Highlight via `nav-active` CSS class on `<td>`
 - `Enter` opens link with `window.open(href, '_blank')`
+- `/` focuses `#filter`; keys are ignored while an input or textarea has focus, except `Escape`, which blurs it
 - Click handler: syncs keyboard state with clicked position
 
 ### style.css

@@ -18,6 +18,11 @@ File: `assets/keyboard-nav.js`
 - `h`/`l`: column -1/+1, clamped to {0,1} (0=icon is skip, 1=name, 2=desc)
 - `Enter`: calls `linkIn(curCell())` → `window.open(href, '_blank')`
 - `Escape`: clear highlight, reset rowIdx to -1
+- `/`: focus `#filter`
+
+## Input Guard
+
+Keys whose target is an `INPUT` or `TEXTAREA` are ignored so the filter accepts every letter. `Escape` there blurs the field.
 
 ## Click Sync
 
