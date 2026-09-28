@@ -50,10 +50,20 @@ function follow() {
   if (a) window.open(a.href, '_blank');
 }
 
+const input = document.getElementById('filter');
+
 document.addEventListener('keydown', e => {
   if (e.metaKey || e.ctrlKey) return;
+  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+    if (e.key === 'Escape') e.target.blur();
+    return;
+  }
 
   switch (e.key) {
+    case '/':
+      e.preventDefault();
+      input.focus();
+      break;
     case 'j': case 'ArrowDown':
       e.preventDefault();
       navRow(1);

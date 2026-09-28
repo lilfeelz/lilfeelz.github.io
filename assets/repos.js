@@ -13,14 +13,15 @@ function fuzzy(q, s) {
   return qi === q.length;
 }
 
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
 function render(filter) {
   const tbody = document.getElementById('repos');
   const filtered = filter ? allRepos.filter(r => fuzzy(filter, r.name)) : allRepos;
   tbody.innerHTML = filtered.map(r => {
-    const name = r.name.replace(/&/g, '&amp;');
-    const desc = (r.description || '')
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return `<tr><td class="col-gh"><a href="https://github.com/${USER}/${r.name}"><img src="https://img.shields.io/badge/-181717?logo=github" alt="github"></a></td><td class="col-name"><a href="${DOCS}/${r.name}">${name}</a></td><td class="col-desc">${desc}</td></tr>`;
+    const seg = esc(encodeURIComponent(r.name));
+    return `<tr><td class="col-gh"><a href="https://github.com/${USER}/${seg}"><img src="https://img.shields.io/badge/-181717?logo=github" alt="github"></a></td><td class="col-name"><a href="${DOCS}/${seg}">${esc(r.name)}</a></td><td class="col-desc">${esc(r.description || '')}</td></tr>`;
   }).join('');
 }
 

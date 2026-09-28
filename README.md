@@ -26,7 +26,9 @@ lilfeelz.github.io/
 │   ├── style.css           # Dark terminal theme, glass accents
 │   ├── repos.js            # GitHub API fetch + fuzzy filter + render
 │   └── keyboard-nav.js     # Vim-style h/j/k/l table navigation
-└── .agents/                # AI agent rules for this repo
+├── .github/workflows/ci.yml  # node --check on assets/*.js
+├── AGENTS.md               # AI agent rules for this repo
+└── .agents/                # Vendored org rules and skills
 ```
 
 ## Features
@@ -41,9 +43,12 @@ lilfeelz.github.io/
 | `k` / `ArrowUp` | Previous row |
 | `h` / `ArrowLeft` | Previous column (name ↔ description) |
 | `l` / `ArrowRight` | Next column |
+| `/` | Focus the filter |
 | `Enter` | Open link in new tab |
-| `Escape` | Clear highlight |
+| `Escape` | Clear highlight, or leave the filter |
 | Click | Focus row/column at click position |
+
+Shortcuts are ignored while the filter (or any input) has focus, so every letter can be typed into it.
 
 Active cell highlighted with cyan glow (`nav-active` class). Scrolled into view smoothly.
 
@@ -67,7 +72,7 @@ fetch(`https://api.github.com/users/lilfeelz/repos?sort=updated&per_page=100&typ
 
 Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` (each project's docs subpage).
 
-**Known issue:** Unauthenticated API — 60 requests/hour rate limit. `.todo` plans localStorage caching with TTL and authenticated API fallback.
+**Known issue:** Unauthenticated API, 60 requests/hour rate limit. No caching or authenticated fallback yet.
 
 ### Style
 
@@ -81,12 +86,8 @@ Dark terminal theme with glass-morphism elements. Color palette:
 
 Deployed via GitHub Pages from `main` branch. Push to `main` → auto-deploys to `docs.lilfeelz.org`.
 
-No CI workflow yet (planned: HTML/JS/CSS validation on PR).
+`.github/workflows/ci.yml` runs `node --check` on `assets/*.js` for every PR and push to `main`, via the shared `JakobMelchard/.github` node workflow.
 
 ## Dependencies
 
 Zero. No npm, no bundler, no build step. Pure vanilla HTML/CSS/JS.
-
-## .todo
-
-See `.todo` for planned work: authenticated API calls, loading state, retry logic, error differentiation, favicon, 404 page, CI workflow, localStorage caching.
