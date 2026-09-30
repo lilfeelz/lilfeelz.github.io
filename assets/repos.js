@@ -21,7 +21,7 @@ function render(filter) {
   const filtered = filter ? allRepos.filter(r => fuzzy(filter, r.name)) : allRepos;
   tbody.innerHTML = filtered.map(r => {
     const seg = esc(encodeURIComponent(r.name));
-    return `<tr><td class="col-gh"><a href="https://github.com/${USER}/${seg}"><img src="https://img.shields.io/badge/-181717?logo=github" alt="github"></a></td><td class="col-name"><a href="${DOCS}/${seg}">${esc(r.name)}</a></td><td class="col-desc">${esc(r.description || '')}</td></tr>`;
+    return `<tr><td class="col-gh"><a href="https://github.com/${USER}/${seg}"><img src="https://img.shields.io/badge/-181717?logo=github" alt="github"></a></td><td class="col-name"><a href="${r.has_pages ? DOCS : `https://github.com/${USER}`}/${seg}">${esc(r.name)}</a></td><td class="col-desc">${esc(r.description || '')}</td></tr>`;
   }).join('');
 }
 

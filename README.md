@@ -72,7 +72,7 @@ Filter input at top of page, real-time filtering as you type. Uses `input` event
 fetch(`https://api.github.com/users/lilfeelz/repos?sort=updated&per_page=100&type=owner`)
 ```
 
-Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` (each project's docs subpage).
+Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` when the repo has Pages, otherwise to the GitHub repo.
 
 **Known issue:** Unauthenticated API, 60 requests/hour rate limit. No caching or authenticated fallback yet.
 
