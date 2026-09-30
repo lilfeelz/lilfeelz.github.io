@@ -15,6 +15,8 @@ npx serve .
 
 Open `http://localhost:8000`. No npm install needed.
 
+Git hooks (`.pre-commit-config.yaml`): `brew install prek && prek install`, once per clone.
+
 ## Structure
 
 ```
