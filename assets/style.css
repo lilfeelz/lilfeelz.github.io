@@ -1,42 +1,43 @@
+/* colours and font come from assets/tokens.css (org design tokens, vendored by config-sync; do not edit it) */
 * { box-sizing: border-box }
 body {
   margin: 0;
   min-height: 100vh;
-  background: #000;
-  color: #eef2f7;
-  font: 16px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.55 var(--font);
 }
-a { color: #9ee7ff; text-decoration: none }
-.filter-wrap { margin-bottom: 8px }
-#filter {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255,255,255,.16);
-  color: #eef2f7;
-  font: inherit;
-  padding: 8px 0;
-  outline: none;
-}
-#filter::placeholder { color: #9aa4b2 }
-#filter:focus { border-bottom-color: #9ee7ff }
+a { color: var(--link); text-decoration: none }
 a:hover { text-decoration: underline }
 .shell {
   width: min(780px, calc(100% - 32px));
   margin: 0 auto;
   padding: 7vh 0;
 }
+.filter-wrap { margin-bottom: 8px }
+#filter {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  color: var(--fg);
+  font: inherit;
+  padding: 8px 0;
+  outline: none;
+}
+#filter::placeholder { color: var(--muted) }
+#filter:focus { border-bottom-color: var(--link) }
 table { width: 100%; border-collapse: collapse }
-th, td { text-align: left; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.16) }
-th { color: #9aa4b2; font-weight: 500; font-size: .85rem }
+th, td { text-align: left; padding: 8px 0; border-bottom: 1px solid var(--line) }
+th { color: var(--muted); font-weight: 500; font-size: .85rem }
 .col-gh { width: 36px; text-align: center }
 .col-gh img { display: block }
 .col-name { min-width: 220px }
-.col-desc { color: #9aa4b2 }
+.col-desc { color: var(--muted) }
 td.nav-active {
-  background: color-mix(in srgb, #9ee7ff 40%, transparent);
-  outline: 1px solid color-mix(in srgb, #9ee7ff 60%, transparent);
+  background: color-mix(in srgb, var(--link) 40%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--link) 60%, transparent);
   outline-offset: -1px;
 }
 .foot-links { margin-top: 24px; font-size: .85rem; text-align: center }
-.foot-links a + a::before { content: "\00B7"; margin: 0 .5em; color: #9aa4b2 }
+.foot-links a + a::before { content: "\00B7"; margin: 0 .5em; color: var(--muted) }
