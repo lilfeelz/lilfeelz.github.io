@@ -6,14 +6,14 @@
   <title>lilfeelz</title>
   <link rel="stylesheet" href="/assets/tokens.css">
   <link rel="stylesheet" href="/assets/style.css">
-  <script src="/assets/repos.js" defer></script>
-  <script src="/assets/keyboard-nav.js" defer></script>
+  <script type="module" src="/assets/repos.js"></script>
+  <script type="module" src="/assets/keyboard-nav.js"></script>
 </head>
-<body>
+<body data-user="lilfeelz" data-docs="https://docs.lilfeelz.org" data-skip="witchblades.org">
 <main class="shell">
   <section>
     <div class="filter-wrap">
-      <input id="filter" type="text" placeholder="/ — filter" autocomplete="off" spellcheck="false">
+      <input id="filter" type="text" placeholder="/ filter" autocomplete="off" spellcheck="false">
     </div>
     <table>
       <thead>
@@ -21,6 +21,7 @@
       </thead>
       <tbody id="repos"><!-- populated by assets/repos.js --></tbody>
     </table>
+    <template id="row"><tr><td class="col-gh"><a><img src="/assets/github.svg" alt="github" width="25" height="20"></a></td><td class="col-name"><a></a></td><td class="col-desc"></td></tr></template>
     <p class="foot-links"><a href="https://lil.feelz.dev">lil.feelz.dev</a> <a href="https://big.feelz.dev">big.feelz.dev</a></p>
   </section>
 </main>

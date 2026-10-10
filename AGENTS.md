@@ -10,6 +10,7 @@ assets/
   style.css          # Dark theme, glass accents, Dracula palette
   repos.js           # GitHub API fetch + fuzzy filter + render
   keyboard-nav.js    # Vim-style h/j/k/l nav
+  github.svg         # Row icon, local so the page loads nothing from third parties
 AGENTS.md            # This file
 .agents/             # Vendored org rules (AGENTS.org.md) and skills
 .github/workflows/   # ci.yml: node --check on assets/*.js
@@ -45,11 +46,13 @@ Push to `main` → GH Pages auto-deploys to `docs.lilfeelz.org`.
 
 ### repos.js
 
-- Fetches from `api.github.com/users/lilfeelz/repos` (unauthenticated = 60 req/hr)
-- Filters: no forks, no archived, no private, exclude `witchblades.org`
+- `assets/repos.js`, `assets/keyboard-nav.js` and `assets/github.svg` are copies of the files in JakobMelchard/JakobMelchard.github.io (docs.melchard.org); change them there and copy them back
+- Site values come from `<body data-user data-docs data-skip>` in `index.html`, so the file holds none
+- Fetches every page of `api.github.com/users/lilfeelz/repos` (unauthenticated = 60 req/hr), 10 s timeout per request
+- Filters: no forks, no archived, no private, skip the names in `data-skip`
 - `fuzzy(q, s)`: sequential char match, case-insensitive
 - Error state: shows "failed to load repos" row, no retry
-- `esc()` escapes `& < > " '` for every API string put into HTML; URL segments also go through `encodeURIComponent`
+- Rows are cloned from `<template id="row">` and filled via `href` and `textContent`; URL segments go through `encodeURIComponent`
 
 ### keyboard-nav.js
 
