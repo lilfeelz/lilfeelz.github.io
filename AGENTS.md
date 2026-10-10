@@ -13,7 +13,7 @@ assets/
   github.svg         # Row icon, local so the page loads nothing from third parties
 AGENTS.md            # This file
 .agents/             # Vendored org rules (AGENTS.org.md) and skills
-.github/workflows/   # ci.yml: node --check on assets/*.js
+.github/workflows/   # ci.yml: node --check and eslint on assets/*.js
 ```
 
 ## Workflow
@@ -34,9 +34,11 @@ python3 -m http.server 8000
 
 ```sh
 for f in assets/*.js; do node --check "$f"; done
+npx --yes eslint@10.12.0 --no-config-lookup --global document,window,fetch,AbortSignal \
+  --rule '{"no-undef": "error", "no-unused-vars": "error"}' assets
 ```
 
-Same check CI runs.
+Same checks CI runs.
 
 ### Deploy
 
