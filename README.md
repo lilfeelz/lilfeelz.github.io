@@ -27,7 +27,8 @@ lilfeelz.github.io/
 ├── assets/
 │   ├── style.css           # Dark terminal theme, glass accents
 │   ├── repos.js            # GitHub API fetch + fuzzy filter + render
-│   └── keyboard-nav.js     # Vim-style h/j/k/l table navigation
+│   ├── keyboard-nav.js     # Vim-style h/j/k/l table navigation
+│   └── github.svg          # Row icon
 ├── .github/workflows/ci.yml  # node --check on assets/*.js
 ├── AGENTS.md               # AI agent rules for this repo
 └── .agents/                # Vendored org rules and skills
@@ -69,8 +70,10 @@ Filter input at top of page, real-time filtering as you type. Uses `input` event
 ### Data Source
 
 ```js
-fetch(`https://api.github.com/users/lilfeelz/repos?sort=updated&per_page=100&type=owner`)
+fetch(`https://api.github.com/users/lilfeelz/repos?sort=full_name&per_page=100&type=owner&page=${page}`)
 ```
+
+Pages until a short page. Owner, docs origin and hidden repos come from `<body data-user data-docs data-skip>`, so `repos.js` and `keyboard-nav.js` are the same files as on docs.melchard.org.
 
 Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` when the repo has Pages, otherwise to the GitHub repo.
 

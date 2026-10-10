@@ -1,6 +1,7 @@
+// Site config sits on <body data-user data-docs data-skip>, so this file is the same on every site.
+const { user, docs, skip = '' } = document.body.dataset;
+const hidden = skip.split(' ');
 const GH = 'https://api.github.com';
-const USER = 'lilfeelz';
-const DOCS = `https://docs.${USER}.org`;
 
 let allRepos = [];
 
@@ -13,22 +14,37 @@ function fuzzy(q, s) {
   return qi === q.length;
 }
 
-const esc = s => String(s).replace(/[&<>"']/g, c =>
-  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-
 function render(filter) {
-  const tbody = document.getElementById('repos');
+  const tpl = document.getElementById('row').content.firstElementChild;
   const filtered = filter ? allRepos.filter(r => fuzzy(filter, r.name)) : allRepos;
-  tbody.innerHTML = filtered.map(r => {
-    const seg = esc(encodeURIComponent(r.name));
-    return `<tr><td class="col-gh"><a href="https://github.com/${USER}/${seg}"><img src="https://img.shields.io/badge/-181717?logo=github" alt="github"></a></td><td class="col-name"><a href="${r.has_pages ? DOCS : `https://github.com/${USER}`}/${seg}">${esc(r.name)}</a></td><td class="col-desc">${esc(r.description || '')}</td></tr>`;
-  }).join('');
+  document.getElementById('repos').replaceChildren(...filtered.map(r => {
+    const tr = tpl.cloneNode(true);
+    const [gh, name] = tr.querySelectorAll('a');
+    const seg = encodeURIComponent(r.name);
+    gh.href = `https://github.com/${user}/${seg}`;
+    name.href = `${r.has_pages ? docs : `https://github.com/${user}`}/${seg}`;
+    name.textContent = r.name;
+    tr.querySelector('.col-desc').textContent = r.description || '';
+    return tr;
+  }));
 }
 
-fetch(`${GH}/users/${USER}/repos?sort=updated&per_page=100&type=owner`)
-  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+// Sorted by name so pages stay stable while paging.
+async function load() {
+  const repos = [];
+  for (let page = 1; ; page++) {
+    const r = await fetch(`${GH}/users/${user}/repos?sort=full_name&per_page=100&type=owner&page=${page}`,
+      { signal: AbortSignal.timeout(10000) });
+    if (!r.ok) throw new Error(r.status);
+    const batch = await r.json();
+    repos.push(...batch);
+    if (batch.length < 100) return repos;
+  }
+}
+
+load()
   .then(repos => {
-    allRepos = repos.filter(r => !r.fork && !r.archived && !r.private && r.name !== 'witchblades.org')
+    allRepos = repos.filter(r => !r.fork && !r.archived && !r.private && !hidden.includes(r.name))
       .sort((a, b) => a.name.localeCompare(b.name));
     const input = document.getElementById('filter');
     input.addEventListener('input', () => render(input.value));
