@@ -6,12 +6,14 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   js:
-    uses: JakobMelchard/.github/.github/workflows/node.yml@main
+    uses: JakobMelchard/.github/.github/workflows/node.yml@bfaa9063ee9c867b43abdad960504803ac847aa0 # v1.3.0
     with:
-      install-cmd: ""            # no package.json — nothing to install
-      lint-cmd: ""
+      install-cmd: "" # no package.json, nothing to install
       check-cmd: |
         rc=0
         for f in assets/*.js; do
@@ -19,6 +21,12 @@ jobs:
           node --check "$f" || rc=1
         done
         exit $rc
+      # No config file: eslint defaults (latest syntax, ES modules) plus the browser globals in use.
+      lint-cmd: >-
+        npx --yes eslint@10.12.0 --no-config-lookup
+        --global document,window,fetch,AbortSignal
+        --rule '{"no-undef": "error", "no-unused-vars": "error"}'
+        assets
 
   hooks:
-    uses: JakobMelchard/.github/.github/workflows/hooks.yml@main
+    uses: JakobMelchard/.github/.github/workflows/hooks.yml@bfaa9063ee9c867b43abdad960504803ac847aa0 # v1.3.0

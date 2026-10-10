@@ -29,7 +29,7 @@ lilfeelz.github.io/
 │   ├── repos.js            # GitHub API fetch + fuzzy filter + render
 │   ├── keyboard-nav.js     # Vim-style h/j/k/l table navigation
 │   └── github.svg          # Row icon
-├── .github/workflows/ci.yml  # node --check on assets/*.js
+├── .github/workflows/ci.yml  # node --check and eslint on assets/*.js
 ├── AGENTS.md               # AI agent rules for this repo
 └── .agents/                # Vendored org rules and skills
 ```
@@ -81,17 +81,13 @@ Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetical
 
 ### Style
 
-Dark terminal theme with glass-morphism elements. Color palette:
-- Background: `#000000`, text: `#eef2f7`
-- Accent: `#9ee7ff` (cyan), muted: `#9aa4b2`
-- Active row: `color-mix(in srgb, #9ee7ff 40%, transparent)`
-- Font: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas`
+Colours and font come from `assets/tokens.css`, the org design tokens vendored from JakobMelchard/.config by `config-sync` (opt-in via `.config/tokens.path`; never edit it by hand). `assets/style.css` only references `var(--bg)`, `var(--fg)`, `var(--link)`, `var(--muted)`, `var(--line)` and `var(--font)`, and is the same file as on docs.melchard.org.
 
 ## CI/CD
 
 Deployed via GitHub Pages from `main` branch. Push to `main` → auto-deploys to `docs.lilfeelz.org`.
 
-`.github/workflows/ci.yml` runs `node --check` on `assets/*.js` for every PR and push to `main`, via the shared `JakobMelchard/.github` node workflow.
+`.github/workflows/ci.yml` runs `node --check` and eslint (`no-undef`, `no-unused-vars`, pinned `npx eslint@10.12.0`, no config file) on `assets/*.js` for every PR and push to `main`, via the shared `JakobMelchard/.github` node workflow pinned to v1.3.0, plus the prek hooks.
 
 ## Dependencies
 
