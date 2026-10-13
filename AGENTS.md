@@ -12,7 +12,7 @@ assets/
   keyboard-nav.js    # Vim-style h/j/k/l nav
   github.svg         # Row icon, local so the page loads nothing from third parties
 AGENTS.md            # This file
-.agents/             # Vendored org rules (AGENTS.org.md) and skills
+.agents/             # Vendored skills
 .github/workflows/   # ci.yml: node --check and eslint on assets/*.js
 ```
 
