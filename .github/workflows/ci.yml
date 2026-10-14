@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   js:
-    uses: JakobMelchard/.github/.github/workflows/node.yml@bfaa9063ee9c867b43abdad960504803ac847aa0 # v1.3.0
+    uses: JakobMelchard/.github/.github/workflows/node.yml@dc944884b137d7f6b96628189bdf041bffc27d93 # v2.2.0
     with:
       install-cmd: "" # no package.json, nothing to install
       check-cmd: |
@@ -29,4 +29,4 @@ jobs:
         assets
 
   hooks:
-    uses: JakobMelchard/.github/.github/workflows/hooks.yml@bfaa9063ee9c867b43abdad960504803ac847aa0 # v1.3.0
+    uses: JakobMelchard/.github/.github/workflows/hooks.yml@dc944884b137d7f6b96628189bdf041bffc27d93 # v2.2.0
