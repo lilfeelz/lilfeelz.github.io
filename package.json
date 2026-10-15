@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc -p jsconfig.json && prettier --check .",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "10.12.0",
+    "prettier": "3.9.9",
+    "typescript": "7.0.2"
+  }
+}

@@ -2,7 +2,7 @@
 
 # docs.lilfeelz.org
 
-Filterable, keyboard-navigable listing of lilfeelz GitHub repositories. Zero-dependency static site, client-side rendered from the unauthenticated GitHub API.
+Filterable, keyboard-navigable listing of lilfeelz GitHub repositories. Static site with no runtime dependencies, client-side rendered from the unauthenticated GitHub API.
 
 ## Quickstart
 
@@ -13,9 +13,9 @@ python3 -m http.server 8000
 npx serve .
 ```
 
-Open `http://localhost:8000`. No npm install needed.
+Open `http://localhost:8000`. Serving needs no npm install.
 
-Git hooks (`.pre-commit-config.yaml`): `brew install prek && prek install`, once per clone.
+Checks: `npm ci`, then `npm run check` (tsc on the JSDoc types, prettier) and `npm run lint` (eslint); `npm run format` rewrites. Git hooks (`.pre-commit-config.yaml`) run the same tools: `brew install prek && prek install`, once per clone.
 
 ## Structure
 
@@ -29,7 +29,9 @@ lilfeelz.github.io/
 │   ├── repos.js            # GitHub API fetch + fuzzy filter + render
 │   ├── keyboard-nav.js     # Vim-style h/j/k/l table navigation
 │   └── github.svg          # Row icon
-├── .github/workflows/ci.yml  # node --check and eslint on assets/*.js
+├── package.json            # dev tools only: typescript, eslint, prettier
+├── jsconfig.json           # tsc --checkJs, strict
+├── .github/workflows/ci.yml  # npm run check and lint, plus the prek hooks
 ├── AGENTS.md               # AI agent rules for this repo
 └── .agents/                # Vendored org rules and skills
 ```
@@ -87,8 +89,8 @@ Colours and font come from `assets/tokens.css`, the org design tokens vendored f
 
 Deployed via GitHub Pages from `main` branch. Push to `main` → auto-deploys to `docs.lilfeelz.org`.
 
-`.github/workflows/ci.yml` runs `node --check` and eslint (`no-undef`, `no-unused-vars`, pinned `npx eslint@10.12.0`, no config file) on `assets/*.js` for every PR and push to `main`, via the shared `JakobMelchard/.github` node workflow pinned to v1.3.0, plus the prek hooks.
+`.github/workflows/ci.yml` runs `npm run check` (tsc `--checkJs` in strict mode over the JSDoc types, prettier) and `npm run lint` (eslint, `eslint.config.js`) for every PR and push to `main`, via the shared `JakobMelchard/.github` node workflow pinned to v2.2.0, plus the prek hooks.
 
 ## Dependencies
 
-Zero. No npm, no bundler, no build step. Pure vanilla HTML/CSS/JS.
+None at runtime. No bundler, no build step: vanilla HTML, CSS and JS with JSDoc types. `package.json` holds only the dev tools, pinned and bumped by Renovate.

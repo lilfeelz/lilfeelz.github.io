@@ -1,7 +1,9 @@
 let rowIdx = -1;
 let colIdx = 1;
 
-function rows() { return [...document.querySelectorAll('tbody tr')]; }
+function rows() {
+  return [...document.querySelectorAll('tbody tr')];
+}
 
 function curCell() {
   const r = rows();
@@ -9,12 +11,16 @@ function curCell() {
   return r[rowIdx].children[colIdx];
 }
 
-function linkIn(el) { return el?.querySelector('a'); }
-
-function clearHl() {
-  document.querySelectorAll('.nav-active').forEach(el => el.classList.remove('nav-active'));
+/** @param {Element | null} el */
+function linkIn(el) {
+  return el?.querySelector('a');
 }
 
+function clearHl() {
+  document.querySelectorAll('.nav-active').forEach((el) => el.classList.remove('nav-active'));
+}
+
+/** @param {Element | null} el */
 function hl(el) {
   if (!el) return;
   clearHl();
@@ -22,6 +28,7 @@ function hl(el) {
   el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
+/** @param {number} d */
 function navRow(d) {
   const r = rows();
   if (!r.length) return;
@@ -29,6 +36,7 @@ function navRow(d) {
   hl(curCell());
 }
 
+/** @param {number} d */
 function navCol(d) {
   const c = colIdx + d;
   if (c < 0 || c > 1) return;
@@ -36,6 +44,10 @@ function navCol(d) {
   hl(curCell());
 }
 
+/**
+ * @param {number} r
+ * @param {number} c
+ */
 function focus(r, c) {
   const all = rows();
   if (r < 0 || r >= all.length) return;
@@ -50,12 +62,13 @@ function follow() {
   if (a) window.open(a.href, '_blank');
 }
 
-const input = document.getElementById('filter');
+const input = /** @type {HTMLInputElement} */ (document.getElementById('filter'));
 
-document.addEventListener('keydown', e => {
+document.addEventListener('keydown', (e) => {
   if (e.metaKey || e.ctrlKey) return;
-  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
-    if (e.key === 'Escape') e.target.blur();
+  const target = /** @type {HTMLElement} */ (e.target);
+  if (['INPUT', 'TEXTAREA'].includes(target.tagName)) {
+    if (e.key === 'Escape') target.blur();
     return;
   }
 
@@ -64,19 +77,23 @@ document.addEventListener('keydown', e => {
       e.preventDefault();
       input.focus();
       break;
-    case 'j': case 'ArrowDown':
+    case 'j':
+    case 'ArrowDown':
       e.preventDefault();
       navRow(1);
       break;
-    case 'k': case 'ArrowUp':
+    case 'k':
+    case 'ArrowUp':
       e.preventDefault();
       navRow(-1);
       break;
-    case 'h': case 'ArrowLeft':
+    case 'h':
+    case 'ArrowLeft':
       e.preventDefault();
       navCol(-1);
       break;
-    case 'l': case 'ArrowRight':
+    case 'l':
+    case 'ArrowRight':
       e.preventDefault();
       navCol(1);
       break;
@@ -91,8 +108,8 @@ document.addEventListener('keydown', e => {
   }
 });
 
-document.addEventListener('click', e => {
-  const link = e.target.closest('a');
+document.addEventListener('click', (e) => {
+  const link = /** @type {Element} */ (e.target).closest('a');
   if (!link) return;
   const td = link.closest('td');
   if (!td) return;
