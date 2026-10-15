@@ -1,0 +1,5 @@
+# Vendored by config-sync, formatted upstream
+.agents/
+.claude/
+assets/tokens.css
+*.md

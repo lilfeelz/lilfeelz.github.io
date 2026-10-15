@@ -1,5 +1,5 @@
 # Hooks come from pinned repos; Renovate bumps the revs. CI runs the same config through
-# JakobMelchard/.github hooks.yml. Setup: brew install prek && prek install
+# JakobMelchard/.github hooks.yml. Setup: npm ci && brew install prek && prek install
 default_install_hook_types: [pre-commit, commit-msg, pre-push]
 default_stages: [pre-commit]
 repos:
@@ -11,3 +11,21 @@ repos:
     rev: v1.0.0
     hooks:
       - id: conventional-commit
+  - repo: local
+    hooks:
+      - id: tsc
+        name: tsc --checkJs
+        entry: npx --no-install tsc -p jsconfig.json
+        language: system
+        files: \.(js|json)$
+        pass_filenames: false
+      - id: prettier
+        name: prettier
+        entry: npx --no-install prettier --check --ignore-unknown
+        language: system
+        types: [text]
+      - id: eslint
+        name: eslint
+        entry: npx --no-install eslint
+        language: system
+        files: \.js$
