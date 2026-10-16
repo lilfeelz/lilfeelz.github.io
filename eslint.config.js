@@ -8,8 +8,12 @@ export default [
         window: 'readonly',
         fetch: 'readonly',
         AbortSignal: 'readonly',
+        Element: 'readonly',
+        HTMLTableRowElement: 'readonly',
+        HTMLInputElement: 'readonly',
+        HTMLTextAreaElement: 'readonly',
       },
     },
     rules: { 'no-undef': 'error', 'no-unused-vars': 'error' },
   },
-];
+]
