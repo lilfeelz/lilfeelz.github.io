@@ -7,13 +7,14 @@ Zero-dependency GH Pages site. Vanilla JS, no build.
 ```
 index.html           # Shell layout + filter + table
 assets/
-  style.css          # Dark theme, glass accents, Dracula palette
+  tokens.css         # Org design tokens, vendored by config-sync; never edit
+  style.css          # Layout; colours from tokens.css
   repos.js           # GitHub API fetch + fuzzy filter + render
   keyboard-nav.js    # Vim-style h/j/k/l nav
   github.svg         # Row icon, local so the page loads nothing from third parties
 AGENTS.md            # This file
 .agents/             # Vendored skills
-.github/workflows/   # ci.yml: node --check and eslint on assets/*.js
+.github/workflows/   # ci.yml: npm run check and lint, plus the prek hooks
 ```
 
 ## Workflow
@@ -33,9 +34,9 @@ python3 -m http.server 8000
 ### Verify
 
 ```sh
-for f in assets/*.js; do node --check "$f"; done
-npx --yes eslint@10.12.0 --no-config-lookup --global document,window,fetch,AbortSignal \
-  --rule '{"no-undef": "error", "no-unused-vars": "error"}' assets
+npm ci
+npm run check   # tsc --checkJs, prettier
+npm run lint    # eslint
 ```
 
 Same checks CI runs.

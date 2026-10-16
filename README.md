@@ -25,7 +25,8 @@ lilfeelz.github.io/
 ├── CNAME                   # Custom domain: docs.lilfeelz.org
 ├── .nojekyll               # Disable Jekyll (pure static)
 ├── assets/
-│   ├── style.css           # Dark terminal theme, glass accents
+│   ├── tokens.css          # Org design tokens, vendored by config-sync
+│   ├── style.css           # Layout; colours from tokens.css
 │   ├── repos.js            # GitHub API fetch + fuzzy filter + render
 │   ├── keyboard-nav.js     # Vim-style h/j/k/l table navigation
 │   └── github.svg          # Row icon
@@ -46,7 +47,7 @@ lilfeelz.github.io/
 |-----|--------|
 | `j` / `ArrowDown` | Next row |
 | `k` / `ArrowUp` | Previous row |
-| `h` / `ArrowLeft` | Previous column (name ↔ description) |
+| `h` / `ArrowLeft` | Previous column (GitHub icon ↔ name) |
 | `l` / `ArrowRight` | Next column |
 | `/` | Focus the filter |
 | `Enter` | Open link in new tab |
@@ -89,7 +90,7 @@ Colours and font come from `assets/tokens.css`, the org design tokens vendored f
 
 Deployed via GitHub Pages from `main` branch. Push to `main` → auto-deploys to `docs.lilfeelz.org`.
 
-`.github/workflows/ci.yml` runs `npm run check` (tsc `--checkJs` in strict mode over the JSDoc types, prettier) and `npm run lint` (eslint, `eslint.config.js`) for every PR and push to `main`, via the shared `JakobMelchard/.github` node workflow pinned to v2.2.0, plus the prek hooks.
+`.github/workflows/ci.yml` runs `npm run check` (tsc `--checkJs` in strict mode over the JSDoc types, prettier) and `npm run lint` (eslint, `eslint.config.js`) for every PR and push to `main`, via the shared `JakobMelchard/.github` node workflow pinned to v2.3.1, plus the prek hooks.
 
 ## Dependencies
 
