@@ -7,7 +7,7 @@ Zero-dependency GH Pages site. Vanilla JS, no build.
 ```
 index.html           # Shell layout + filter + table
 assets/
-  tokens.css         # Org design tokens, vendored by config-sync; never edit
+  tokens.css         # Org design tokens, copied from JakobMelchard/web; never edit
   style.css          # Layout; colours from tokens.css
   repos.js           # GitHub API fetch + fuzzy filter + render
   keyboard-nav.js    # Vim-style h/j/k/l nav
