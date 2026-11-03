@@ -25,7 +25,7 @@ lilfeelz.github.io/
 ├── CNAME                   # Custom domain: docs.lilfeelz.org
 ├── .nojekyll               # Disable Jekyll (pure static)
 ├── assets/
-│   ├── tokens.css          # Org design tokens, vendored by config-sync
+│   ├── tokens.css          # Org design tokens, copied from JakobMelchard/web
 │   ├── style.css           # Layout; colours from tokens.css
 │   ├── repos.js            # GitHub API fetch + fuzzy filter + render
 │   ├── keyboard-nav.js     # Vim-style h/j/k/l table navigation
@@ -84,7 +84,7 @@ Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetical
 
 ### Style
 
-Colours and font come from `assets/tokens.css`, the org design tokens vendored from JakobMelchard/.config by `config-sync` (opt-in via `.config/tokens.path`; never edit it by hand). `assets/style.css` only references `var(--bg)`, `var(--fg)`, `var(--link)`, `var(--muted)`, `var(--line)` and `var(--font)`, and is the same file as on docs.melchard.org.
+Colours and font come from `assets/tokens.css`, a copy of `dist/tokens.css` from JakobMelchard/web at the tag its first line names (listed in `.config/tokens.path`, checked by the `web-tokens` hook; never edit it by hand). `assets/style.css` only references `var(--bg)`, `var(--fg)`, `var(--link)`, `var(--muted)`, `var(--line)` and `var(--font)`, and is the same file as on docs.melchard.org.
 
 ## CI/CD
 
