@@ -1,4 +1,4 @@
-/* colours and font come from assets/tokens.css (org design tokens, vendored by config-sync; do not edit it) */
+/* colours and font come from assets/tokens.css (copy of JakobMelchard/web dist/tokens.css, checked by the web-tokens hook; do not edit it) */
 * {
   box-sizing: border-box;
 }
