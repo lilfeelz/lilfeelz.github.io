@@ -73,15 +73,55 @@ async function load() {
   }
 }
 
-load()
-  .then((repos) => {
-    allRepos = repos
-      .filter((r) => !r.fork && !r.archived && !r.private && !hidden.includes(r.name))
-      .sort((a, b) => a.name.localeCompare(b.name))
-    const input = /** @type {HTMLInputElement} */ (document.getElementById('filter'))
-    input.addEventListener('input', () => render(input.value))
-    render('')
-  })
-  .catch(() => {
-    list.innerHTML = '<tr><td colspan="3">failed to load repos</td></tr>'
-  })
+const KEY = `repos:${user}`
+const TTL = 60 * 60e3
+
+/** @returns {{ at: number, repos: Repo[] } | null} the cached list, or null when storage is empty or blocked */
+function cached() {
+  try {
+    const c = JSON.parse(localStorage.getItem(KEY) || 'null')
+    return c && Array.isArray(c.repos) ? c : null
+  } catch {
+    return null
+  }
+}
+
+const input = /** @type {HTMLInputElement} */ (document.getElementById('filter'))
+input.addEventListener('input', () => render(input.value))
+
+/** @param {Repo[]} repos shows these repos, keeping the current filter */
+function show(repos) {
+  allRepos = repos
+  render(input.value)
+}
+
+// the unauthenticated API allows 60 requests an hour per IP, so a cached list renders first and outlives a 403
+const hit = cached()
+if (hit) show(hit.repos)
+if (!hit || Date.now() - hit.at > TTL)
+  load()
+    .then((repos) => {
+      const kept = repos
+        .filter((r) => !r.fork && !r.archived && !r.private && !hidden.includes(r.name))
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map(({ name, description, has_pages, fork, archived, private: p }) => ({
+          name,
+          description,
+          has_pages,
+          fork,
+          archived,
+          private: p,
+        }))
+      try {
+        localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), repos: kept }))
+      } catch {
+        // storage full or blocked: the list still renders, only uncached
+      }
+      show(kept)
+    })
+    .catch((/** @type {Error} */ e) => {
+      if (hit) return
+      const why =
+        e.message === '403' ? 'GitHub rate limit reached, try again later' : 'failed to load repos'
+      list.innerHTML = `<tr><td colspan="3">${why}</td></tr>`
+    })
