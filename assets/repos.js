@@ -79,20 +79,20 @@ const TTL = 60 * 60e3
 /** @returns {{ at: number, repos: Repo[] } | null} the cached list, or null when storage is empty or blocked */
 function cached() {
   try {
-    const c = JSON.parse(localStorage.getItem(KEY) || 'null')
+    const c = JSON.parse(globalThis.localStorage.getItem(KEY) || 'null')
     return c && Array.isArray(c.repos) ? c : null
   } catch {
     return null
   }
 }
 
-const input = /** @type {HTMLInputElement} */ (document.getElementById('filter'))
-input.addEventListener('input', () => render(input.value))
+const filterInput = /** @type {HTMLInputElement} */ (document.getElementById('filter'))
+filterInput.addEventListener('input', () => render(filterInput.value))
 
 /** @param {Repo[]} repos shows these repos, keeping the current filter */
 function show(repos) {
   allRepos = repos
-  render(input.value)
+  render(filterInput.value)
 }
 
 // the unauthenticated API allows 60 requests an hour per IP, so a cached list renders first and outlives a 403
@@ -113,7 +113,7 @@ if (!hit || Date.now() - hit.at > TTL)
           private: p,
         }))
       try {
-        localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), repos: kept }))
+        globalThis.localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), repos: kept }))
       } catch {
         // storage full or blocked: the list still renders, only uncached
       }
