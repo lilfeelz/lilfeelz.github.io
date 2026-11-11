@@ -78,7 +78,7 @@ fetch(`https://api.github.com/users/lilfeelz/repos?sort=full_name&per_page=100&t
 
 Pages until a short page. Owner, docs origin and hidden repos come from `<body data-user data-docs data-skip>`, so `repos.js` and `keyboard-nav.js` are the same files as on docs.melchard.org.
 
-Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` when the repo has Pages, otherwise to the GitHub repo.
+Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` when the repo has Pages (the `lilfeelz.github.io` repo itself links to the docs root), otherwise to the GitHub repo.
 
 **Known issue:** Unauthenticated API, 60 requests/hour rate limit. No caching or authenticated fallback yet.
 
