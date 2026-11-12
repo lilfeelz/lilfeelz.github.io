@@ -1,6 +1,8 @@
 // Site config sits on <body data-user data-docs data-skip>, so this file is the same on every site.
 const { user, docs, skip = '' } = document.body.dataset
 const hidden = skip.split(' ')
+// Pages serves the <user>.github.io repo at the docs root, not under /<repo>
+const root = `${user}.github.io`.toLowerCase()
 const GH = 'https://api.github.com'
 
 /**
@@ -45,7 +47,11 @@ function render(filter) {
       const [gh, name] = tr.querySelectorAll('a')
       const seg = encodeURIComponent(r.name)
       gh.href = `https://github.com/${user}/${seg}`
-      name.href = `${r.has_pages ? docs : `https://github.com/${user}`}/${seg}`
+      name.href = !r.has_pages
+        ? `https://github.com/${user}/${seg}`
+        : r.name.toLowerCase() === root
+          ? `${docs}/`
+          : `${docs}/${seg}`
       name.textContent = r.name
       const desc = /** @type {Element} */ (tr.querySelector('.col-desc'))
       desc.textContent = r.description || ''
