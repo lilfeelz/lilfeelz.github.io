@@ -2,96 +2,40 @@
 
 # docs.lilfeelz.org
 
-Filterable, keyboard-navigable listing of lilfeelz GitHub repositories. Static site with no runtime dependencies, client-side rendered from the unauthenticated GitHub API.
+Filterable, keyboard-navigable listing of `lilfeelz` GitHub repositories. Static site with no runtime dependencies, rendered client-side from the unauthenticated GitHub API.
 
 ## Quickstart
 
 ```sh
-# Serve locally (no build step)
-python3 -m http.server 8000
-# or
-npx serve .
+python3 -m http.server 8000  # or: npx serve .
 ```
 
-Open `http://localhost:8000`. Serving needs no npm install.
-
-Checks: `npm ci`, then `npm run check` (tsc on the JSDoc types, prettier) and `npm run lint` (eslint); `npm run format` rewrites. Git hooks (`.pre-commit-config.yaml`) run the same tools: `brew install prek && prek install`, once per clone.
+Open `http://localhost:8000` (no `npm install` needed to serve).
+Dev checks: `npm ci`, `npm run check` (`tsc` + `prettier`), `npm run lint` (`eslint`), `npm run format`. Pre-commit hooks: `brew install prek && prek install`.
 
 ## Structure
 
-```
-lilfeelz.github.io/
-├── index.html              # Shell layout, filter input, table
-├── CNAME                   # Custom domain: docs.lilfeelz.org
-├── .nojekyll               # Disable Jekyll (pure static)
-├── assets/
-│   ├── tokens.css          # Org design tokens, copied from JakobMelchard/web
-│   ├── style.css           # Layout; colours from tokens.css
-│   ├── repos.js            # GitHub API fetch + fuzzy filter + render
-│   ├── keyboard-nav.js     # Vim-style h/j/k/l table navigation
-│   └── github.svg          # Row icon
-├── package.json            # dev tools only: typescript, eslint, prettier
-├── jsconfig.json           # tsc --checkJs, strict
-├── .github/workflows/ci.yml  # npm run check and lint, plus the prek hooks
-├── AGENTS.md               # AI agent rules for this repo
-└── .agents/                # Vendored org rules and skills
-```
+- `index.html`: shell layout, filter input, repo table, footer links
+- `assets/tokens.css`: org design tokens from `JakobMelchard/web` (`.config/tokens.path`)
+- `assets/style.css`, `assets/repos.js`, `assets/keyboard-nav.js`, `assets/github.svg`: synced from `JakobMelchard/JakobMelchard.github.io`
+- `CNAME`, `.nojekyll`: GitHub Pages config (`docs.lilfeelz.org`)
+- `.github/workflows/ci.yml`: `npm run check`, `npm run lint`, and `prek` hooks via `JakobMelchard/.github` (`v2.3.1`)
 
-## Features
-
-### Keyboard Navigation
-
-`keyboard-nav.js` implements vim-style table row/column navigation:
+## Navigation & Filter
 
 | Key | Action |
-|-----|--------|
-| `j` / `ArrowDown` | Next row |
-| `k` / `ArrowUp` | Previous row |
-| `h` / `ArrowLeft` | Previous column (GitHub icon ↔ name) |
-| `l` / `ArrowRight` | Next column |
-| `/` | Focus the filter |
-| `Enter` | Open link in new tab |
-| `Escape` | Clear highlight, or leave the filter |
-| Click | Focus row/column at click position |
+|---|---|
+| `j` / `ArrowDown`, `k` / `ArrowUp` | Next / previous row |
+| `h` / `ArrowLeft`, `l` / `ArrowRight` | Switch between GitHub icon and name columns |
+| `/` | Focus filter input |
+| `Enter` | Open highlighted link in a new tab |
+| `Escape` | Clear highlight or blur filter |
+| Click | Highlight clicked row/column |
 
-Shortcuts are ignored while the filter (or any input) has focus, so every letter can be typed into it.
+Fuzzy filter matches characters sequentially, case-insensitively (for example `"ttm"` matches `"totem"`, `"cfg"` matches `".config"`).
 
-Active cell highlighted with cyan glow (`nav-active` class). Scrolled into view smoothly.
+## Data, Style & Deploy
 
-### Fuzzy Filter
-
-`repos.js` implements character-wise fuzzy matching on repo names:
-
-```js
-// "zmt" matches "zmk" (z matches z, m matches m, t skips)
-// "cfg" matches ".config" (c matches c, f matches ., g matches g)
-function fuzzy(q, s) { /* case-insensitive, sequential char match */ }
-```
-
-Filter input at top of page, real-time filtering as you type. Uses `input` event, no debounce.
-
-### Data Source
-
-```js
-fetch(`https://api.github.com/users/lilfeelz/repos?sort=full_name&per_page=100&type=owner&page=${page}`)
-```
-
-Pages until a short page. Owner, docs origin and hidden repos come from `<body data-user data-docs data-skip>`, so `repos.js` and `keyboard-nav.js` are the same files as on docs.melchard.org.
-
-Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` when the repo has Pages (the `lilfeelz.github.io` repo itself links to the docs root), otherwise to the GitHub repo.
-
-The list is cached in localStorage for an hour, so the unauthenticated 60 requests/hour limit only blanks the page without a cache.
-
-### Style
-
-Colours and font come from `assets/tokens.css`, a copy of `dist/tokens.css` from JakobMelchard/web at the tag its first line names (listed in `.config/tokens.path`, checked by the `web-tokens` hook; never edit it by hand). `assets/style.css` only references `var(--bg)`, `var(--fg)`, `var(--link)`, `var(--muted)`, `var(--line)` and `var(--font)`, and is the same file as on docs.melchard.org.
-
-## CI/CD
-
-Deployed via GitHub Pages from `main` branch. Push to `main` → auto-deploys to `docs.lilfeelz.org`.
-
-`.github/workflows/ci.yml` runs `npm run check` (tsc `--checkJs` in strict mode over the JSDoc types, prettier) and `npm run lint` (eslint, `eslint.config.js`) for every PR and push to `main`, via the shared `JakobMelchard/.github` node workflow pinned to v2.3.1, plus the prek hooks.
-
-## Dependencies
-
-None at runtime. No bundler, no build step: vanilla HTML, CSS and JS with JSDoc types. `package.json` holds only the dev tools, pinned and bumped by Renovate.
+- `index.html` configures `<body data-user data-docs data-skip>`; `repos.js` excludes forks, archived repos, private repos, and `data-skip` entries, caching results in `localStorage` for 1 hour (60 req/hr unauthenticated API limit).
+- Links open `https://docs.lilfeelz.org/<repo>` when GitHub Pages is enabled (`lilfeelz.github.io` opens `https://docs.lilfeelz.org/`), otherwise the GitHub repo.
+- Push to `main` deploys via GitHub Pages to `docs.lilfeelz.org`.
