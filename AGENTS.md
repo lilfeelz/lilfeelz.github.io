@@ -1,78 +1,25 @@
-# docs.lilfeelz.org — Site Guide
+# docs.lilfeelz.org: Site Guide
 
-Zero-dependency GH Pages site. Vanilla JS, no build.
+Zero-dependency static GitHub Pages site (`vanilla JS`, JSDoc types, no build step).
+Site settings live on `<body data-user data-docs data-skip>` in `index.html`; footer links point to `https://lil.feelz.dev` and `https://big.feelz.dev`.
 
-## Structure
+## Upstream Sync Contract
 
-```
-index.html           # Shell layout + filter + table
-assets/
-  tokens.css         # Org design tokens, copied from JakobMelchard/web; never edit
-  style.css          # Layout; colours from tokens.css
-  repos.js           # GitHub API fetch + fuzzy filter + render
-  keyboard-nav.js    # Vim-style h/j/k/l nav
-  github.svg         # Row icon, local so the page loads nothing from third parties
-AGENTS.md            # This file
-.agents/             # Vendored skills
-.github/workflows/   # ci.yml: npm run check and lint, plus the prek hooks
-```
+- `assets/repos.js`, `assets/keyboard-nav.js`, `assets/github.svg`, and `assets/style.css` are copied from `JakobMelchard/JakobMelchard.github.io`; edit upstream first and sync back here.
+- `assets/tokens.css` is copied from `JakobMelchard/web` (`dist/tokens.css`) and tracked in `.config/tokens.path` (`web-tokens` hook enforces an exact match; never edit by hand).
 
 ## Workflow
 
-### Edit
-
-Edit `assets/` files directly. No build step — changes reflect on reload.
-
-### Test locally
-
-```sh
-cd ~/Workspaces/lilfeelz/lilfeelz.github.io
-python3 -m http.server 8000
-# open http://localhost:8000
-```
-
-### Verify
-
-```sh
-npm ci
-npm run check   # tsc --checkJs, prettier
-npm run lint    # eslint
-```
-
-Same checks CI runs.
-
-### Deploy
-
-Push to `main` → GH Pages auto-deploys to `docs.lilfeelz.org`.
+- Edit `index.html` or `assets/` directly; test locally and deploy on push to `main` (GitHub Pages serves `docs.lilfeelz.org`).
+- Run `npm run check` (`tsc -p jsconfig.json` + `prettier --check .`) and `npm run lint` (`eslint .`) per `README.md` and `.github/workflows/ci.yml`.
 
 ## Key Files
 
-### repos.js
-
-- `assets/repos.js`, `assets/keyboard-nav.js` and `assets/github.svg` are copies of the files in JakobMelchard/JakobMelchard.github.io (docs.melchard.org); change them there and copy them back
-- Site values come from `<body data-user data-docs data-skip>` in `index.html`, so the file holds none
-- Fetches every page of `api.github.com/users/lilfeelz/repos` (unauthenticated = 60 req/hr), 10 s timeout per request
-- Filters: no forks, no archived, no private, skip the names in `data-skip`
-- `fuzzy(q, s)`: sequential char match, case-insensitive
-- Error state: shows "failed to load repos" row, no retry
-- Rows are cloned from `<template id="row">` and filled via `href` and `textContent`; URL segments go through `encodeURIComponent`
-
-### keyboard-nav.js
-
-- Row tracking via `rowIdx`, column via `colIdx` (0=github icon, 1=name, 2=desc)
-- Highlight via `nav-active` CSS class on `<td>`
-- `Enter` opens link with `window.open(href, '_blank')`
-- `/` focuses `#filter`; keys are ignored while an input or textarea has focus, except `Escape`, which blurs it
-- Click handler: syncs keyboard state with clicked position
-
-### style.css
-
-- `color-mix()` for active row overlay (needs modern browser)
-- No reset CSS — minimal `* { box-sizing: border-box }` only
+- **repos.js**: paginates `api.github.com/users/lilfeelz/repos` (10s timeout, 1h `localStorage` cache for 60 req/hr limit); drops forks, archived, private, and `data-skip` entries; clones `<template id="row">` with `textContent` and `encodeURIComponent` URLs; shows `"GitHub rate limit reached, try again later"` on 403 or `"failed to load repos"` on other errors when uncached.
+- **keyboard-nav.js**: tracks `rowIdx` and `colIdx` (0=github icon, 1=name); applies `.nav-active` on `<td>`; `Enter` calls `window.open(href, '_blank')`; `/` focuses `#filter`; ignores keys inside inputs/textareas (`Escape` blurs); click syncs `rowIdx`/`colIdx`.
+- **style.css**: uses `color-mix()` for `.nav-active` and minimal `* { box-sizing: border-box }` (no CSS reset).
 
 ## Constraints
 
-- 60 req/hr unauthenticated rate limit on GitHub API
-- No build step — must work as static files on GH Pages
-- Keyboard nav must work with dynamic DOM (tbody replaced on filter)
-- No external dependencies (no jQuery, no framework)
+- Static files only on GitHub Pages (no bundler, no runtime dependencies).
+- Keyboard navigation must work against dynamic `<tbody>` rows replaced on filter.
