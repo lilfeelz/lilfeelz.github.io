@@ -25,16 +25,14 @@ lilfeelz.github.io/
 ├── CNAME                   # Custom domain: docs.lilfeelz.org
 ├── .nojekyll               # Disable Jekyll (pure static)
 ├── assets/
-│   ├── tokens.css          # Org design tokens, copied from JakobMelchard/web
+│   ├── tokens.css          # Org design tokens, vendored
 │   ├── style.css           # Layout; colours from tokens.css
 │   ├── repos.js            # GitHub API fetch + fuzzy filter + render
 │   ├── keyboard-nav.js     # Vim-style h/j/k/l table navigation
 │   └── github.svg          # Row icon
 ├── package.json            # dev tools only: typescript, eslint, prettier
 ├── jsconfig.json           # tsc --checkJs, strict
-├── .github/workflows/ci.yml  # npm run check and lint, plus the prek hooks
-├── AGENTS.md               # AI agent rules for this repo
-└── .agents/                # Vendored org rules and skills
+└── .github/workflows/ci.yml  # npm run check and lint, plus the prek hooks
 ```
 
 ## Features
@@ -76,15 +74,15 @@ Filter input at top of page, real-time filtering as you type. Uses `input` event
 fetch(`https://api.github.com/users/lilfeelz/repos?sort=full_name&per_page=100&type=owner&page=${page}`)
 ```
 
-Pages until a short page. Owner, docs origin and hidden repos come from `<body data-user data-docs data-skip>`, so `repos.js` and `keyboard-nav.js` are the same files as on docs.melchard.org.
+Pages until a short page. Owner, docs origin and hidden repos come from `<body data-user data-docs data-skip>`.
 
-Filters out forks, archived, private, and `witchblades.org`. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` when the repo has Pages (the `lilfeelz.github.io` repo itself links to the docs root), otherwise to the GitHub repo.
+Filters out forks, archived and private repositories. Sorted alphabetically by name. Links go to `https://docs.lilfeelz.org/<repo>` when the repo has Pages (the `lilfeelz.github.io` repo itself links to the docs root), otherwise to the GitHub repo.
 
 The list is cached in localStorage for an hour, so the unauthenticated 60 requests/hour limit only blanks the page without a cache.
 
 ### Style
 
-Colours and font come from `assets/tokens.css`, a copy of `dist/tokens.css` from JakobMelchard/web at the tag its first line names (listed in `.config/tokens.path`, checked by the `web-tokens` hook; never edit it by hand). `assets/style.css` only references `var(--bg)`, `var(--fg)`, `var(--link)`, `var(--muted)`, `var(--line)` and `var(--font)`, and is the same file as on docs.melchard.org.
+Colours and font come from `assets/tokens.css`, vendored from the shared org token package. Its first line names the tag it came from and the `web-tokens` hook checks it; never edit it by hand. `assets/style.css` only references the custom properties and is shared with docs.melchard.org.
 
 ## CI/CD
 
