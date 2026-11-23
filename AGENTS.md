@@ -26,7 +26,7 @@ Edit `assets/` files directly. No build step — changes reflect on reload.
 ### Test locally
 
 ```sh
-cd ~/Workspaces/lilfeelz/lilfeelz.github.io
+cd ~/Workspaces/personal/lilfeelz/lilfeelz.github.io
 python3 -m http.server 8000
 # open http://localhost:8000
 ```
